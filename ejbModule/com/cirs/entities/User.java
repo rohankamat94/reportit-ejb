@@ -1,5 +1,6 @@
 package com.cirs.entities;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -27,7 +28,7 @@ public class User extends CirsEntity {
 	@Column(name = "first_name")
 	private String firstName;
 
-	@Column(name = "email", nullable = false, unique = true)
+	@Column(name = "email", unique = true)
 	private String email;
 
 	@Column(name = "username", nullable = false, unique = true)
@@ -40,15 +41,17 @@ public class User extends CirsEntity {
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 
-	@Column(name = "password")
+	@Column(name = "password", nullable = false)
 	private String password;
 
 	@Column(name = "profile_pic")
 	private String profilePic;
 
 	@Column(name = "dob")
-	@Temporal(TemporalType.DATE)
-	private Date dob;
+	private String dob;
+
+	@Column(name = "phone_number")
+	private String phone;
 
 	public Long getId() {
 		return id;
@@ -57,8 +60,8 @@ public class User extends CirsEntity {
 	public User() {
 	}
 
-	public User(String firstName, String email, String userName, String lastName, Date dob, Gender gender,
-			String password, String profilePic) {
+	public User(String firstName, String email, String userName, String lastName, String dob, Gender gender,
+			String password, String profilePic, String phone) {
 		super();
 		this.dob = dob;
 		this.firstName = firstName;
@@ -68,6 +71,7 @@ public class User extends CirsEntity {
 		this.gender = gender;
 		this.password = password;
 		this.profilePic = profilePic;
+		this.phone = phone;
 	}
 
 	public void setId(Long id) {
@@ -128,6 +132,22 @@ public class User extends CirsEntity {
 
 	public void setProfilePic(String profilePic) {
 		this.profilePic = profilePic;
+	}
+
+	public String getDob() {
+		return dob;
+	}
+
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 }

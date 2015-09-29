@@ -2,10 +2,8 @@ package com.cirs.dao;
 
 import java.util.List;
 
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -16,6 +14,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 import com.cirs.dao.remote.Dao;
 import com.cirs.entities.CirsEntity;
 import com.cirs.exceptions.EntityNotCreatedException;
+import com.cirs.exceptions.EntityNotFoundException;
 
 public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 
@@ -72,10 +71,11 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 	}
 
 	@Override
-	public boolean edit(T entity) {
+	public boolean edit(T entity) throws EntityNotFoundException {
 		EntityManager em = getEntityManager();
-		if (em.find(entityClass, entity.getId()) == null){
-			throw new EntityNotFoundException();
+		if (em.find(entityClass, entity.getId()) == null) {
+			throw new EntityNotFoundException(
+					"Could not find " + entityClass.getSimpleName() + "with id" + entity.getId());
 		}
 		try {
 			System.out.println("in edit");
@@ -87,6 +87,9 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
+			closeFactory();
 		}
 	}
 
@@ -105,6 +108,7 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 			e1.addSuppressed(e);
 			throw e1;
 		} catch (Exception e) {
+			System.out.println("in catch 2");
 			throw e;
 		} finally {
 			em.close();

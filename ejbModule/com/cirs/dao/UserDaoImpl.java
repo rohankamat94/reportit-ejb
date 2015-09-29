@@ -43,8 +43,12 @@ public class UserDaoImpl extends AbstractDao<User>implements UserDao {
 			// int rowNumber = 1;
 			Iterator<Row> i = sheet.rowIterator();
 			i.next();
+			int entitiesCreated = 0;
 			while (i.hasNext()) {
 				Row r = i.next();
+				if (!r.cellIterator().hasNext()) {
+					break;
+				}
 				String userName = r.getCell(0).getStringCellValue();
 				String password = r.getCell(1).getStringCellValue();
 
@@ -52,13 +56,15 @@ public class UserDaoImpl extends AbstractDao<User>implements UserDao {
 					User u = new User();
 					u.setUserName(userName);
 					u.setPassword(password);
-					u.setEmail(userName);
+					System.out.println("before create");
 					create(u);
-				} catch (EntityNotCreatedException e) {
-					e.printStackTrace();
-				}
+					entitiesCreated++;
 
+				} catch (EntityNotCreatedException e) {
+					System.out.println(e);
+				}
 			}
+			System.out.println("no of entities created " + entitiesCreated);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InvalidFormatException e1) {
@@ -76,6 +82,7 @@ public class UserDaoImpl extends AbstractDao<User>implements UserDao {
 			em.flush();
 			em.getTransaction().commit();
 		}
+
 		em.close();
 		closeFactory();
 	}
