@@ -46,12 +46,12 @@ public class UserDaoImpl extends AbstractDao<User>implements UserDao {
 			int entitiesCreated = 0;
 			while (i.hasNext()) {
 				Row r = i.next();
-				if (!r.cellIterator().hasNext()) {
+				if (r.getCell(0)==null) {
 					break;
 				}
 				String userName = r.getCell(0).getStringCellValue();
 				String password = r.getCell(1).getStringCellValue();
-
+				
 				try {
 					User u = new User();
 					u.setUserName(userName);
