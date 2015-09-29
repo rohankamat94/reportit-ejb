@@ -13,6 +13,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 
 import com.cirs.dao.remote.Dao;
 import com.cirs.entities.CirsEntity;
+import com.cirs.entities.User;
 import com.cirs.exceptions.EntityNotCreatedException;
 import com.cirs.exceptions.EntityNotFoundException;
 
@@ -96,6 +97,7 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 	@Override
 	public boolean create(T entity) throws EntityNotCreatedException {
 		EntityManager em = getEntityManager();
+		System.out.println("in super create");
 		try {
 			em.getTransaction().begin();
 			em.persist(entity);
@@ -106,10 +108,15 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 			EntityNotCreatedException e1 = new EntityNotCreatedException(
 					"could not create " + entityClass.getSimpleName() + e.getMessage());
 			e1.addSuppressed(e);
+			em.getTransaction().rollback();
 			throw e1;
 		} catch (Exception e) {
 			System.out.println("in catch 2");
-			throw e;
+			System.out.println("actual cause " + e.getCause());
+			EntityNotCreatedException e1=new EntityNotCreatedException(
+					"could not create " + entityClass.getSimpleName() + e.getMessage());
+			em.getTransaction().rollback();
+			throw e1;
 		} finally {
 			em.close();
 			closeFactory();
