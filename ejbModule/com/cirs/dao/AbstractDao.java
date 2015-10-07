@@ -1,6 +1,8 @@
 package com.cirs.dao;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -8,12 +10,15 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 import com.cirs.dao.remote.Dao;
 import com.cirs.entities.CirsEntity;
-import com.cirs.entities.User;
 import com.cirs.exceptions.EntityNotCreatedException;
 import com.cirs.exceptions.EntityNotFoundException;
 
@@ -42,7 +47,8 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<T> cq = cb.createQuery(entityClass);
 		try {
-			return em.createQuery(cq.select(cq.from(entityClass))).getResultList();
+			List<T> list = em.createQuery(cq.select(cq.from(entityClass))).getResultList();
+			return list;
 		} finally {
 			em.close();
 			closeFactory();
@@ -95,6 +101,82 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 	}
 
 	@Override
+	public Long countAllLazy(Map<String, Object> filters) {
+		EntityManager em = getEntityManager();
+		try {
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+			Root<T> root = cq.from(entityClass);
+
+			List<Predicate> predicates = new ArrayList<>();
+			if (filters != null) {
+				for (String key : filters.keySet()) {
+					System.out.println("calling from count");
+					predicates.addAll(getPredicates(cb, root, key, filters.get(key)));
+				}
+			}
+
+			cq.distinct(true);
+			cq.select(cb.count(root));
+			cq.where(predicates.toArray(new Predicate[0]));
+			return em.createQuery(cq).getSingleResult();
+		} finally {
+			em.close();
+			closeFactory();
+		}
+	}
+
+	@Override
+	public List<T> findAllLazy(int first, int pageSize, Map<String, Object> filters, Map<String, Object> sortParams) {
+		EntityManager em = getEntityManager();
+		try {
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			CriteriaQuery<T> cq = cb.createQuery(entityClass);
+			Root<T> root = (cq.from(entityClass));
+			List<Predicate> predicates = new ArrayList<>();
+			if (filters != null) {
+				for (String key : filters.keySet()) {
+					System.out.println("calling from count");
+					predicates.addAll(getPredicates(cb, root, key, filters.get(key)));
+				}
+			}
+			List<Order> orderList = new ArrayList<>();
+			if (sortParams != null) {
+				for (String s : sortParams.keySet()) {
+					Boolean b = (Boolean) sortParams.get(s);
+					Order o;
+					if (b) {
+						o = cb.asc(root.get(s));
+					} else {
+						o = cb.desc(root.get(s));
+					}
+					orderList.add(o);
+				}
+			}
+			List<T> resultList = em.createQuery(cb.createQuery(entityClass).select(root)
+					.where(predicates.toArray(new Predicate[0])).orderBy(orderList)).setFirstResult(first)
+					.setMaxResults(pageSize).getResultList();
+			System.out.println(resultList.size());
+			return resultList == null ? new ArrayList<T>() : resultList;
+		} finally {
+			em.close();
+			closeFactory();
+		}
+	}
+
+	private List<Predicate> getPredicates(CriteriaBuilder cb, Root<?> root, String key, Object o) {
+		List<Predicate> predicates = new ArrayList<>();
+		Path<?> path = root.get(key);
+		System.out.println("key: " + key + " object: " + o + " object class" + o.getClass().getSimpleName());
+		if (path.getJavaType().equals(String.class)) {
+			System.out.println("in if");
+			Predicate p = cb.like(root.<String> get(key), "%" + o + "%");
+			predicates.add(p);
+		}
+		return predicates;
+	}
+
+	@Override
 	public boolean create(T entity) throws EntityNotCreatedException {
 		EntityManager em = getEntityManager();
 		System.out.println("in super create");
@@ -113,7 +195,7 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 		} catch (Exception e) {
 			System.out.println("in catch 2");
 			System.out.println("actual cause " + e.getCause());
-			EntityNotCreatedException e1=new EntityNotCreatedException(
+			EntityNotCreatedException e1 = new EntityNotCreatedException(
 					"could not create " + entityClass.getSimpleName() + e.getMessage());
 			em.getTransaction().rollback();
 			throw e1;
