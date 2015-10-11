@@ -120,4 +120,17 @@ public class UserDaoImpl extends AbstractDao<User>implements UserDao {
 		}
 	}
 
+	@Override
+	public User findById(Object id) {
+		EntityManager em = getEntityManager();
+		try {
+			Long userId = Long.valueOf(id.toString());
+			System.out.println("value of id in user.findById" + id);
+			return em.find(User.class, userId);
+		} finally {
+			em.close();
+			closeFactory();
+		}
+	}
+
 }

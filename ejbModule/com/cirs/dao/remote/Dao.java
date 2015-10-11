@@ -9,6 +9,8 @@ import com.cirs.exceptions.EntityNotFoundException;
 
 public interface Dao<T extends CirsEntity> {
 	public List<T> findAll();
+	
+	public T findById(Object id);
 
 	public boolean create(T entity) throws EntityNotCreatedException;
 
