@@ -19,7 +19,8 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "cirs_user")
-@NamedQueries({ @NamedQuery(name = "findUserByUserName", query = "SELECT u FROM User u WHERE u.userName = :userName") })
+@NamedQueries({ @NamedQuery(name = "findUserByUserName", query = "SELECT u FROM User u WHERE u.userName = :userName"),
+		@NamedQuery(name = "verifyCredentials", query = "SELECT u from User u WHERE u.userName= :userName and u.password= :password") })
 public class User extends CirsEntity {
 
 	@Id
@@ -34,7 +35,7 @@ public class User extends CirsEntity {
 	@Column(name = "email", unique = true)
 	private String email;
 
-	@Column(name = "username", nullable = false, unique = true)
+	@Column(name = "username", nullable = false, updatable=false, unique = true)
 	private String userName;
 
 	@Column(name = "last_name")
@@ -44,7 +45,7 @@ public class User extends CirsEntity {
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 
-	@Column(name = "password", nullable = false)
+	@Column(name = "password", nullable = false, updatable=false)
 	private String password;
 
 	@Column(name = "profile_pic")

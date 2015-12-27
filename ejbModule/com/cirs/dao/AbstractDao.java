@@ -58,11 +58,11 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 	public boolean delete(Object id) {
 		EntityManager em = getEntityManager();
 		T t = em.find(entityClass, id);
-		if (t == null) {
+		try {
+			if (t == null) {
 			System.out.println(entityClass.getSimpleName() + " with id " + id + " does not exist ");
 			return true;
 		}
-		try {
 			em.getTransaction().begin();
 			em.remove(t);
 			em.flush();

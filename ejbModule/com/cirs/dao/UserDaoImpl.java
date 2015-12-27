@@ -10,6 +10,9 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Row;
@@ -24,7 +27,7 @@ import com.cirs.entities.UserUploadResponse;
 import com.cirs.exceptions.EntityNotCreatedException;
 
 @Stateless(name = "userDao")
-public class UserDaoImpl extends AbstractDao<User>implements UserDao {
+public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	// private EntityManager em;
 
 	public UserDaoImpl() {
@@ -127,6 +130,24 @@ public class UserDaoImpl extends AbstractDao<User>implements UserDao {
 			Long userId = Long.valueOf(id.toString());
 			System.out.println("value of id in user.findById" + id);
 			return em.find(User.class, userId);
+		} finally {
+			em.close();
+			closeFactory();
+		}
+	}
+
+	@Override
+	public User verifyCredentials(String userName, String password) {
+		EntityManager em = getEntityManager();
+		try {
+			// TypedQuery<User> query =
+			List<User> users = em.createNamedQuery("verifyCredentials", User.class).setParameter("userName", userName)
+					.setParameter("password", password).getResultList();
+			if (users.size() > 0) {
+				return users.get(0);
+			} else {
+				return null;
+			}
 		} finally {
 			em.close();
 			closeFactory();

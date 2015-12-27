@@ -16,4 +16,6 @@ public interface UserDao extends Dao<User> {
 	public UserUploadResponse upload(File file);
 
 	public User findUserByUserName(String userName);
+	
+	public User verifyCredentials(String userName, String password);
 }
