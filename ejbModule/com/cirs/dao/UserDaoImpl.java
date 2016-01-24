@@ -85,7 +85,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		return ur;
 	}
 
-	@Override
+//	@Override
 	public void create(List<User> entities) {
 		EntityManager em = getEntityManager();
 
@@ -123,7 +123,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		}
 	}
 
-	@Override
+	/*@Override
 	public User findById(Object id) {
 		EntityManager em = getEntityManager();
 		try {
@@ -134,7 +134,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 			em.close();
 			closeFactory();
 		}
-	}
+	}*/
 
 	@Override
 	public User verifyCredentials(String userName, String password) {

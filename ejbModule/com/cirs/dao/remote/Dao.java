@@ -22,5 +22,5 @@ public interface Dao<T extends CirsEntity> {
 
 	public List<T> findAllLazy(int first, int pageSize, Map<String, Object> filters, Map<String, Object> sortMap);
 
-	public void create(List<T> entites);
+//	public void create(List<T> entites);
 }

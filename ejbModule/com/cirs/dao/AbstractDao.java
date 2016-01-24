@@ -19,6 +19,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 
 import com.cirs.dao.remote.Dao;
 import com.cirs.entities.CirsEntity;
+import com.cirs.entities.User;
 import com.cirs.exceptions.EntityNotCreatedException;
 import com.cirs.exceptions.EntityNotFoundException;
 
@@ -60,9 +61,9 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 		T t = em.find(entityClass, id);
 		try {
 			if (t == null) {
-			System.out.println(entityClass.getSimpleName() + " with id " + id + " does not exist ");
-			return true;
-		}
+				System.out.println(entityClass.getSimpleName() + " with id " + id + " does not exist ");
+				return true;
+			}
 			em.getTransaction().begin();
 			em.remove(t);
 			em.flush();
@@ -203,6 +204,24 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 			em.close();
 			closeFactory();
 		}
-
 	}
+
+	@Override
+	public T findById(Object id) {
+		EntityManager em = getEntityManager();
+		try {
+			if (entityClass.getDeclaredField("id").getType().equals(Long.class) && (id instanceof String)) {
+				id = Long.valueOf(id.toString());
+			}
+			return em.find(entityClass, id);
+		} catch (NoSuchFieldException | SecurityException e) {
+			System.out.println("in findById reflection exception");
+			e.printStackTrace();
+			throw new RuntimeException("id " + id + " is not a field in " + entityClass.getSimpleName());
+		} finally {
+			em.close();
+			closeFactory();
+		}
+	}
+
 }

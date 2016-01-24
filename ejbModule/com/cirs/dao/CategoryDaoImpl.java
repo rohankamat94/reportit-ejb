@@ -34,9 +34,4 @@ public class CategoryDaoImpl extends AbstractDao<Category> implements CategoryDa
 		}
 	}
 
-	@Override
-	public void create(List<Category> entites) {
-		throw new UnsupportedOperationException("Cannot create List of categories");
-
-	}
 }
