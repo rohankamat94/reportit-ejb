@@ -2,6 +2,7 @@ package com.cirs.entities;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -153,5 +154,21 @@ public class User extends CirsEntity {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof User))
+			return false;
+		User other = (User) obj;
+		return Objects.equals(id, other.id);
+	}	
 
 }

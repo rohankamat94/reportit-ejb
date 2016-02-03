@@ -1,6 +1,7 @@
 package com.cirs.entities;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +19,7 @@ import javax.persistence.TemporalType;
 @Entity
 public class Complaint extends CirsEntity {
 	public static enum Status {
-		NEW
+		PENDING, DUPLICATE, SOLVED, SPAM;
 	}
 
 	@Column(name = "complaint_id")
@@ -38,13 +39,13 @@ public class Complaint extends CirsEntity {
 	private Status status;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(referencedColumnName="category_id", name="category_id")
+	@JoinColumn(referencedColumnName = "category_id", name = "category_id")
 	private Category category;
 
 	private Timestamp timestamp;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(referencedColumnName="id", name="user_id")
+	@JoinColumn(referencedColumnName = "id", name = "user_id")
 	private User user;
 
 	@Override
@@ -110,4 +111,21 @@ public class Complaint extends CirsEntity {
 		this.user = user;
 	}
 
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Complaint))
+			return false;
+		Complaint other = (Complaint) obj;
+		return Objects.equals(id, other.id);
+	}
+	
 }
