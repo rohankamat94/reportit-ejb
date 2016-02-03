@@ -1,7 +1,5 @@
 package com.cirs.entities;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -15,14 +13,17 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "cirs_user")
 @NamedQueries({ @NamedQuery(name = "findUserByUserName", query = "SELECT u FROM User u WHERE u.userName = :userName"),
 		@NamedQuery(name = "verifyCredentials", query = "SELECT u from User u WHERE u.userName= :userName and u.password= :password") })
 public class User extends CirsEntity {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6400091099179867101L;
 
 	@Id
 	@SequenceGenerator(name = "user_id_seq", sequenceName = "user_id_seq", allocationSize = 1)

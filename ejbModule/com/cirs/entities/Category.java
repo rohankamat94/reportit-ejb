@@ -16,6 +16,11 @@ import javax.persistence.Table;
 @Table(name = "category")
 @NamedQueries(@NamedQuery(name = "findActiveCategories", query = "SELECT c FROM Category c WHERE c.active=true"))
 public class Category extends CirsEntity {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4008581528843761504L;
+
 	@Id
 	@SequenceGenerator(name = "category_id_seq", sequenceName = "category_category_id_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "category_id_seq")

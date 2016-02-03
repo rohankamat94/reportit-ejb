@@ -13,11 +13,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 public class Complaint extends CirsEntity {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9199809379768333572L;
+
 	public static enum Status {
 		PENDING, DUPLICATE, SOLVED, SPAM;
 	}

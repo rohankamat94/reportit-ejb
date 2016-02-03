@@ -1,7 +1,5 @@
 package com.cirs.dao;
 
-import java.util.List;
-
 import javax.ejb.Stateless;
 
 import com.cirs.dao.remote.ComplaintDao;
@@ -13,5 +11,4 @@ public class ComplaintDaoImpl extends AbstractDao<Complaint> implements Complain
 	public ComplaintDaoImpl() {
 		super(Complaint.class);
 	}
-
 }

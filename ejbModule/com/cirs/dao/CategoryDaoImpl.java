@@ -7,7 +7,8 @@ import javax.persistence.EntityManager;
 
 import com.cirs.dao.remote.CategoryDao;
 import com.cirs.entities.Category;
-@Stateless(name="categoryDao")
+
+@Stateless(name = "categoryDao")
 public class CategoryDaoImpl extends AbstractDao<Category> implements CategoryDao {
 	public CategoryDaoImpl() {
 		super(Category.class);
@@ -15,7 +16,7 @@ public class CategoryDaoImpl extends AbstractDao<Category> implements CategoryDa
 
 	public List<Category> findAllActive() {
 		EntityManager em = getEntityManager();
-		List<Category> result = em.createNamedQuery("findActiveCategories").getResultList();
+		List<Category> result = em.createNamedQuery("findActiveCategories", Category.class).getResultList();
 		em.close();
 		closeFactory();
 		return result;

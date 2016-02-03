@@ -1,7 +1,6 @@
 package com.cirs.dao;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +19,6 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 
 import com.cirs.dao.remote.Dao;
 import com.cirs.entities.CirsEntity;
-import com.cirs.entities.User;
 import com.cirs.exceptions.EntityNotCreatedException;
 import com.cirs.exceptions.EntityNotFoundException;
 
@@ -171,7 +169,8 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 		Path<?> path = root.get(key);
 		System.out.println("key: " + key + " object: " + o + " object class" + o.getClass().getSimpleName());
 		if(o instanceof Map){
-			Map<String,Object> map=(Map<String,Object>)o;
+			@SuppressWarnings("unchecked")
+			Map<String,Object> map=(Map<String, Object>)o;
 			for(String newKey:map.keySet()){
 				predicates.addAll(getPredicates(cb, path, newKey, map.get(newKey)));
 			}
