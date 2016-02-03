@@ -1,6 +1,7 @@
 package com.cirs.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -103,7 +104,7 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 
 	@Override
 	public Long countAllLazy(Map<String, Object> filters) {
-		EntityManager em = getEntityManager();
+		EntityManager em = getEntityManager(); 
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Long> cq = cb.createQuery(Long.class);
@@ -165,10 +166,16 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 		}
 	}
 
-	private List<Predicate> getPredicates(CriteriaBuilder cb, Root<?> root, String key, Object o) {
-		List<Predicate> predicates = new ArrayList<>();
+	private List<Predicate> getPredicates(CriteriaBuilder cb, Path<?> root, String key, Object o) {
+		List<Predicate> predicates = new ArrayList<>(); 
 		Path<?> path = root.get(key);
 		System.out.println("key: " + key + " object: " + o + " object class" + o.getClass().getSimpleName());
+		if(o instanceof Map){
+			Map<String,Object> map=(Map<String,Object>)o;
+			for(String newKey:map.keySet()){
+				predicates.addAll(getPredicates(cb, path, newKey, map.get(newKey)));
+			}
+		}
 		if (path.getJavaType().equals(String.class)) {
 			System.out.println("in if");
 			Predicate p = cb.like(root.<String> get(key), "%" + o + "%");
