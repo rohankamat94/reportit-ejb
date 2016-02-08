@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -57,6 +59,10 @@ public class Category extends CirsEntity {
 		this.active = active;
 	}
 
+	@ManyToOne(optional = false)
+	@JoinColumn(referencedColumnName = "admin_id", name = "admin_id")
+	private Admin admin;
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -73,5 +79,13 @@ public class Category extends CirsEntity {
 		Category other = (Category) obj;
 		return Objects.equals(id, other.id);
 	}
-	
+
+	public Admin getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
+
 }

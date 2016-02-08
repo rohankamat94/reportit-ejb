@@ -18,6 +18,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import com.cirs.dao.remote.UserDao;
+import com.cirs.entities.Admin;
 import com.cirs.entities.UploadError;
 import com.cirs.entities.User;
 import com.cirs.entities.UserUploadResponse;
@@ -36,7 +37,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		closeFactory();
 	};
 
-	public UserUploadResponse upload(File f) {
+	public UserUploadResponse upload(Admin admin, File f) {
 		int entitiesCreated = 0;
 		List<UploadError> errors = new ArrayList<>();
 		try (Workbook wb = WorkbookFactory.create(f)) {
@@ -63,6 +64,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 					User u = new User();
 					u.setUserName(userName);
 					u.setPassword(password);
+					u.setAdmin(admin);
 					boolean created = create(u);
 					if (!created) {
 						errors.add(new UploadError(rowNumber++, "User with username " + userName + " already exists"));

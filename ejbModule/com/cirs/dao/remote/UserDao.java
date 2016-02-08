@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import com.cirs.dao.UserDaoImpl;
+import com.cirs.entities.Admin;
 import com.cirs.entities.User;
 import com.cirs.entities.UserUploadResponse;
 
@@ -13,7 +14,7 @@ import com.cirs.entities.UserUploadResponse;
 public interface UserDao extends Dao<User> {
 	public List<User> findAll();
 
-	public UserUploadResponse upload(File file);
+	public UserUploadResponse upload(Admin admin, File file);
 
 	public User findUserByUserName(String userName);
 	

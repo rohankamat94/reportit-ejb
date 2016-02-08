@@ -9,6 +9,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -37,7 +39,7 @@ public class User extends CirsEntity {
 	@Column(name = "email", unique = true)
 	private String email;
 
-	@Column(name = "username", nullable = false, updatable=false, unique = true)
+	@Column(name = "username", nullable = false, updatable = false, unique = true)
 	private String userName;
 
 	@Column(name = "last_name")
@@ -47,7 +49,7 @@ public class User extends CirsEntity {
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 
-	@Column(name = "password", nullable = false, updatable=false)
+	@Column(name = "password", nullable = false, updatable = false)
 	private String password;
 
 	@Column(name = "profile_pic")
@@ -58,6 +60,10 @@ public class User extends CirsEntity {
 
 	@Column(name = "phone_number")
 	private String phone;
+
+	@JoinColumn(referencedColumnName = "admin_id", name = "admin_id")
+	@ManyToOne
+	private Admin admin;
 
 	public Long getId() {
 		return id;
@@ -155,11 +161,12 @@ public class User extends CirsEntity {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -170,6 +177,14 @@ public class User extends CirsEntity {
 			return false;
 		User other = (User) obj;
 		return Objects.equals(id, other.id);
-	}	
+	}
+
+	public Admin getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
 
 }
