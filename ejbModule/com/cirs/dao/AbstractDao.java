@@ -179,6 +179,9 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 			System.out.println("in if");
 			Predicate p = cb.like(root.<String> get(key), "%" + o + "%");
 			predicates.add(p);
+		}else if(path.getJavaType().equals(Long.class)){
+			Predicate p = cb.equal(root.<Long>get(key), o);
+			predicates.add(p);
 		}
 		return predicates;
 	}
