@@ -19,6 +19,8 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 
 import com.cirs.dao.remote.Dao;
 import com.cirs.entities.CirsEntity;
+import com.cirs.entities.Complaint;
+import com.cirs.entities.User;
 import com.cirs.exceptions.EntityNotCreatedException;
 import com.cirs.exceptions.EntityNotFoundException;
 
@@ -48,6 +50,7 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 		CriteriaQuery<T> cq = cb.createQuery(entityClass);
 		try {
 			List<T> list = em.createQuery(cq.select(cq.from(entityClass))).getResultList();
+
 			return list;
 		} finally {
 			em.close();
@@ -102,7 +105,7 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 
 	@Override
 	public Long countAllLazy(Map<String, Object> filters) {
-		EntityManager em = getEntityManager(); 
+		EntityManager em = getEntityManager();
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<Long> cq = cb.createQuery(Long.class);
@@ -165,13 +168,13 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 	}
 
 	private List<Predicate> getPredicates(CriteriaBuilder cb, Path<?> root, String key, Object o) {
-		List<Predicate> predicates = new ArrayList<>(); 
+		List<Predicate> predicates = new ArrayList<>();
 		Path<?> path = root.get(key);
 		System.out.println("key: " + key + " object: " + o + " object class" + o.getClass().getSimpleName());
-		if(o instanceof Map){
+		if (o instanceof Map) {
 			@SuppressWarnings("unchecked")
-			Map<String,Object> map=(Map<String, Object>)o;
-			for(String newKey:map.keySet()){
+			Map<String, Object> map = (Map<String, Object>) o;
+			for (String newKey : map.keySet()) {
 				predicates.addAll(getPredicates(cb, path, newKey, map.get(newKey)));
 			}
 		}
@@ -179,8 +182,8 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 			System.out.println("in if");
 			Predicate p = cb.like(root.<String> get(key), "%" + o + "%");
 			predicates.add(p);
-		}else if(path.getJavaType().equals(Long.class)){
-			Predicate p = cb.equal(root.<Long>get(key), o);
+		} else if (path.getJavaType().equals(Long.class)) {
+			Predicate p = cb.equal(root.<Long> get(key), o);
 			predicates.add(p);
 		}
 		return predicates;

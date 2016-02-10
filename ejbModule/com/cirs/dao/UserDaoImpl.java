@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PreDestroy;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Row;
@@ -19,8 +22,10 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import com.cirs.dao.remote.UserDao;
 import com.cirs.entities.Admin;
+import com.cirs.entities.Complaint;
 import com.cirs.entities.UploadError;
 import com.cirs.entities.User;
+import com.cirs.entities.User.UserTO;
 import com.cirs.entities.UserUploadResponse;
 import com.cirs.exceptions.EntityNotCreatedException;
 
@@ -84,7 +89,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		return ur;
 	}
 
-//	@Override
+	// @Override
 	public void create(List<User> entities) {
 		EntityManager em = getEntityManager();
 
@@ -122,18 +127,12 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		}
 	}
 
-	/*@Override
-	public User findById(Object id) {
-		EntityManager em = getEntityManager();
-		try {
-			Long userId = Long.valueOf(id.toString());
-			System.out.println("value of id in user.findById" + id);
-			return em.find(User.class, userId);
-		} finally {
-			em.close();
-			closeFactory();
-		}
-	}*/
+	/*
+	 * @Override public User findById(Object id) { EntityManager em =
+	 * getEntityManager(); try { Long userId = Long.valueOf(id.toString());
+	 * System.out.println("value of id in user.findById" + id); return
+	 * em.find(User.class, userId); } finally { em.close(); closeFactory(); } }
+	 */
 
 	@Override
 	public User verifyCredentials(String userName, String password) {
@@ -147,6 +146,21 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 			} else {
 				return null;
 			}
+		} finally {
+			em.close();
+			closeFactory();
+		}
+	}
+
+	@Override
+	public List<UserTO> getUserWithComplaints() {
+		EntityManager em = getEntityManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<User> cq = cb.createQuery(entityClass);
+		try {
+			List<User> list = em.createQuery(cq.select(cq.from(entityClass))).getResultList();
+			List<UserTO> users = list.stream().map(User::getUserTO).collect(Collectors.toList());
+			return users;
 		} finally {
 			em.close();
 			closeFactory();
