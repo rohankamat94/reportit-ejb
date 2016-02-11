@@ -23,8 +23,7 @@ public class Category extends CirsEntity {
 	 */
 	private static final long serialVersionUID = 4008581528843761504L;
 
-	public static final String FIND_BY_ADMIN = "findByAdmin";
-	public static final String PARAM_ADMIN_ID = "adminId";
+	public static final String FIND_BY_ADMIN = "findCategoryByAdmin";
 
 	@Id
 	@SequenceGenerator(name = "category_id_seq", sequenceName = "category_category_id_seq", allocationSize = 1)

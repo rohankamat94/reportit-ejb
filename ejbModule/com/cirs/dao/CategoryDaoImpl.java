@@ -15,7 +15,8 @@ public class CategoryDaoImpl extends AbstractDao<Category> implements CategoryDa
 		super(Category.class);
 	}
 
-	public List<Category> findAllActive(Long adminId) {
+	@Override
+	public List<Category> findAll(Long adminId) {
 		EntityManager em = getEntityManager();
 		try {
 			TypedQuery<Category> query = em.createNamedQuery(Category.FIND_BY_ADMIN, Category.class);

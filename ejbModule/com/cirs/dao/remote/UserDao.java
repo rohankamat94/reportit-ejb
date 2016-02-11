@@ -13,13 +13,12 @@ import com.cirs.entities.UserUploadResponse;
 
 @Remote(UserDaoImpl.class)
 public interface UserDao extends Dao<User> {
-	public List<User> findAll();
 
 	public UserUploadResponse upload(Admin admin, File file);
 
 	public User findUserByUserName(String userName);
-	
+
 	public User verifyCredentials(String userName, String password);
-	
-	public List<UserTO> getUserWithComplaints();
+
+	public List<UserTO> findAllUsersWithComplaints(Long adminId);
 }

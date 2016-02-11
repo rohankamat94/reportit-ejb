@@ -19,8 +19,6 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 
 import com.cirs.dao.remote.Dao;
 import com.cirs.entities.CirsEntity;
-import com.cirs.entities.Complaint;
-import com.cirs.entities.User;
 import com.cirs.exceptions.EntityNotCreatedException;
 import com.cirs.exceptions.EntityNotFoundException;
 
@@ -44,19 +42,7 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 		}
 	}
 
-	public List<T> findAll() {
-		EntityManager em = getEntityManager();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<T> cq = cb.createQuery(entityClass);
-		try {
-			List<T> list = em.createQuery(cq.select(cq.from(entityClass))).getResultList();
-
-			return list;
-		} finally {
-			em.close();
-			closeFactory();
-		}
-	}
+	public abstract List<T> findAll(Long adminId);
 
 	public boolean delete(Object id) {
 		EntityManager em = getEntityManager();

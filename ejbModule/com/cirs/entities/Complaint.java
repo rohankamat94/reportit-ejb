@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -24,12 +26,15 @@ import com.cirs.entities.User.UserTO;
 
 @Entity
 @Table(name = "complaint")
+@NamedQueries({@NamedQuery(name=Complaint.FIND_BY_ADMIN,query="SELECT c FROM Complaint c where c.user.admin.id=:adminId")})
 public class Complaint extends CirsEntity {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -9199809379768333572L;
-
+	public static final String FIND_BY_ADMIN="findComplaintByAdmin";
+	
+	
 	public static enum Status {
 		PENDING, DUPLICATE, SOLVED, SPAM;
 	}

@@ -31,14 +31,30 @@ public class Admin extends CirsEntity {
 	@Column(name = "password")
 	private String password;
 
+	public static class AdminTO {
+		private Long id;
+
+		public AdminTO(Long id) {
+			this.id = id;
+		}
+
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+	}
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2449732658253299908L;
 
 	@Override
-	public Object getId() {
-		// TODO Auto-generated method stub
+	public Long getId() {
 		return id;
 	}
 

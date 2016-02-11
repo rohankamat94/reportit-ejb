@@ -5,12 +5,17 @@ import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
 import com.cirs.dao.remote.ComplaintDao;
+import com.cirs.entities.Category;
+import com.cirs.entities.CirsEntity;
 import com.cirs.entities.Complaint;
+import com.cirs.entities.User;
 import com.cirs.entities.Complaint.ComplaintTO;
+import com.cirs.entities.User.UserTO;
 
 @Stateless(name = "complaintDao")
 public class ComplaintDaoImpl extends AbstractDao<Complaint> implements ComplaintDao {
@@ -19,21 +24,6 @@ public class ComplaintDaoImpl extends AbstractDao<Complaint> implements Complain
 		super(Complaint.class);
 	}
 
-	@Override
-	public List<ComplaintTO> getComplaintwithComments() {
-		EntityManager em = getEntityManager();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Complaint> cq = cb.createQuery(entityClass);
-		try {
-			List<Complaint> list = em.createQuery(cq.select(cq.from(entityClass))).getResultList();
-			list.stream().forEach(u -> ((Complaint) u).getComments().size());
-			List<ComplaintTO> toList = list.stream().map(c -> c.getComplaintTO()).collect(Collectors.toList());
-			return toList;
-		} finally {
-			em.close();
-			closeFactory();
-		}
-	}
 
 	@Override
 	public Complaint findByIdWithComments(Long id) {
@@ -52,6 +42,37 @@ public class ComplaintDaoImpl extends AbstractDao<Complaint> implements Complain
 		}
 
 		return null;
+	}
+
+	@Override
+	public List<Complaint> findAll(Long adminId) {
+		EntityManager em = getEntityManager();
+		try {
+			TypedQuery<Complaint> query = em.createNamedQuery(Complaint.FIND_BY_ADMIN, Complaint.class);
+			query.setParameter(CirsEntity.PARAM_ADMIN_ID, adminId);
+			List<Complaint> result = query.getResultList();
+			return result;
+		} finally {
+			em.close();
+			closeFactory();
+		}
+	}
+
+
+	@Override
+	public List<ComplaintTO> getComplaintwithComments(Long adminId) {
+		EntityManager em = getEntityManager();
+		try {
+
+			TypedQuery<Complaint> query = em.createNamedQuery(Complaint.FIND_BY_ADMIN, Complaint.class);
+			query.setParameter(CirsEntity.PARAM_ADMIN_ID, adminId);
+			List<Complaint> list = query.getResultList();		
+			List<ComplaintTO> users = list.stream().map(Complaint::getComplaintTO).collect(Collectors.toList());
+			return users;
+		} finally {
+			em.close();
+			closeFactory();
+		}
 	}
 
 }

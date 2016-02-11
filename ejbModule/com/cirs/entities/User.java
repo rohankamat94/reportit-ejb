@@ -19,18 +19,21 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.cirs.entities.Admin.AdminTO;
 import com.cirs.entities.Complaint.ComplaintTO;
 
 @Entity
 @Table(name = "cirs_user")
 @NamedQueries({ @NamedQuery(name = "findUserByUserName", query = "SELECT u FROM User u WHERE u.userName = :userName"),
-		@NamedQuery(name = "verifyCredentials", query = "SELECT u from User u WHERE u.userName= :userName and u.password= :password") })
+		@NamedQuery(name = "verifyCredentials", query = "SELECT u from User u WHERE u.userName= :userName and u.password= :password"),
+		@NamedQuery(name=User.FIND_BY_ADMIN,query="SELECT u from User u WHERE u.admin.id=:adminId") })
 public class User extends CirsEntity {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6400091099179867101L;
+	public static final String FIND_BY_ADMIN="findUserByAdmin";
 
 	@Id
 	@SequenceGenerator(name = "user_id_seq", sequenceName = "user_id_seq", allocationSize = 1)
@@ -66,7 +69,7 @@ public class User extends CirsEntity {
 	@Column(name = "phone_number")
 	private String phone;
 
-	@JoinColumn(referencedColumnName = "admin_id", name = "admin_id")
+	@JoinColumn(referencedColumnName = "admin_id", name = "admin_id", nullable = false, updatable = false)
 	@ManyToOne
 	private Admin admin;
 
@@ -205,8 +208,9 @@ public class User extends CirsEntity {
 
 	public UserTO getUserTO() {
 		UserTO to = new UserTO();
+		to.id=id;
 		to.firstName = firstName;
-		to.admin = admin;
+		to.admin = new AdminTO(admin.getId());
 		to.dob = dob;
 		to.lastName = lastName;
 		to.gender = gender;
@@ -215,7 +219,7 @@ public class User extends CirsEntity {
 		List<ComplaintTO> complaintTos = new ArrayList<>();
 		for (Complaint c : complaints) {
 			ComplaintTO cTo = new ComplaintTO();
-			cTo.setId(id);
+			cTo.setId(c.getId());
 			cTo.setCategory(c.getCategory());
 			cTo.setTitle(c.getTitle());
 			cTo.setDescription(c.getDescription());
@@ -244,7 +248,7 @@ public class User extends CirsEntity {
 
 		private String phone;
 
-		private Admin admin;
+		private AdminTO admin;
 
 		private List<ComplaintTO> complaints;
 
@@ -288,7 +292,7 @@ public class User extends CirsEntity {
 			return phone;
 		}
 
-		public Admin getAdmin() {
+		public AdminTO getAdmin() {
 			return admin;
 		}
 
@@ -328,7 +332,7 @@ public class User extends CirsEntity {
 			this.phone = phone;
 		}
 
-		public void setAdmin(Admin admin) {
+		public void setAdmin(AdminTO admin) {
 			this.admin = admin;
 		}
 

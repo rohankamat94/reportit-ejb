@@ -16,15 +16,20 @@ public class AdminDaoImpl extends AbstractDao<Admin> implements AdminDao {
 	}
 
 	@Override
+	public List<Admin> findAll(Long id) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
 	public Admin verifyAdmin(String username, String password) {
 		EntityManager em = getEntityManager();
 		try {
-			TypedQuery<Admin> query= em.createNamedQuery(Admin.GET_ADMIN, Admin.class);
+			TypedQuery<Admin> query = em.createNamedQuery(Admin.GET_ADMIN, Admin.class);
 			query.setParameter(Admin.USERNAME_PARAM, username);
 			query.setParameter(Admin.PASSWORD_PARAM, password);
-			List<Admin> admin=query.getResultList();
-			return admin.size()==0?null:admin.get(0);
-			
+			List<Admin> admin = query.getResultList();
+			return admin.size() == 0 ? null : admin.get(0);
+
 		} finally {
 			em.close();
 			closeFactory();
@@ -33,14 +38,14 @@ public class AdminDaoImpl extends AbstractDao<Admin> implements AdminDao {
 
 	@Override
 	public Admin findByUsername(String username) {
-		EntityManager em=getEntityManager();
-		try{
-			TypedQuery<Admin> query= em.createNamedQuery(Admin.FIND_BY_USERNAME, Admin.class);
+		EntityManager em = getEntityManager();
+		try {
+			TypedQuery<Admin> query = em.createNamedQuery(Admin.FIND_BY_USERNAME, Admin.class);
 			query.setParameter(Admin.USERNAME_PARAM, username);
-			List<Admin> admin=query.getResultList();
-			return admin.size()==0?null:admin.get(0);
-			
-		}finally{
+			List<Admin> admin = query.getResultList();
+			return admin.size() == 0 ? null : admin.get(0);
+
+		} finally {
 			em.close();
 			closeFactory();
 		}

@@ -10,7 +10,7 @@ import com.cirs.entities.Complaint.ComplaintTO;
 
 @Remote(ComplaintDaoImpl.class)
 public interface ComplaintDao extends Dao<Complaint> {
-	List<ComplaintTO> getComplaintwithComments();
+	List<ComplaintTO> getComplaintwithComments(Long adminId);
 
 	Complaint findByIdWithComments(Long id);
 }

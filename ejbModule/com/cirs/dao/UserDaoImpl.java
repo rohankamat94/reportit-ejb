@@ -11,8 +11,6 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Row;
@@ -22,7 +20,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import com.cirs.dao.remote.UserDao;
 import com.cirs.entities.Admin;
-import com.cirs.entities.Complaint;
+import com.cirs.entities.CirsEntity;
 import com.cirs.entities.UploadError;
 import com.cirs.entities.User;
 import com.cirs.entities.User.UserTO;
@@ -32,7 +30,7 @@ import com.cirs.exceptions.EntityNotCreatedException;
 @Stateless(name = "userDao")
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	// private EntityManager em;
-
+	
 	public UserDaoImpl() {
 		super(User.class);
 	}
@@ -153,12 +151,27 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 
 	@Override
-	public List<UserTO> getUserWithComplaints() {
+	public List<User> findAll(Long adminId) {
 		EntityManager em = getEntityManager();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<User> cq = cb.createQuery(entityClass);
 		try {
-			List<User> list = em.createQuery(cq.select(cq.from(entityClass))).getResultList();
+			TypedQuery<User> query = em.createNamedQuery(User.FIND_BY_ADMIN, User.class);
+			query.setParameter(CirsEntity.PARAM_ADMIN_ID, adminId);
+			List<User> result = query.getResultList();
+			return result;
+		} finally {
+			em.close();
+			closeFactory();
+		}
+	}
+
+	@Override
+	public List<UserTO> findAllUsersWithComplaints(Long adminId) {
+		EntityManager em = getEntityManager();
+		try {
+
+			TypedQuery<User> query = em.createNamedQuery(User.FIND_BY_ADMIN, User.class);
+			query.setParameter(CirsEntity.PARAM_ADMIN_ID, adminId);
+			List<User> list = query.getResultList();		
 			List<UserTO> users = list.stream().map(User::getUserTO).collect(Collectors.toList());
 			return users;
 		} finally {
