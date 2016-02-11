@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 import com.cirs.dao.remote.CategoryDao;
 import com.cirs.entities.Category;
@@ -14,12 +15,17 @@ public class CategoryDaoImpl extends AbstractDao<Category> implements CategoryDa
 		super(Category.class);
 	}
 
-	public List<Category> findAllActive() {
+	public List<Category> findAllActive(Long adminId) {
 		EntityManager em = getEntityManager();
-		List<Category> result = em.createNamedQuery("findActiveCategories", Category.class).getResultList();
-		em.close();
-		closeFactory();
-		return result;
+		try {
+			TypedQuery<Category> query = em.createNamedQuery(Category.FIND_BY_ADMIN, Category.class);
+			query.setParameter(Category.PARAM_ADMIN_ID, adminId);
+			List<Category> result = query.getResultList();
+			return result;
+		} finally {
+			em.close();
+			closeFactory();
+		}
 	}
 
 	@Override
