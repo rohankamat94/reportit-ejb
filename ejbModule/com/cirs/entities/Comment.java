@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +26,7 @@ public class Comment extends CirsEntity {
 	@Column(name = "comment_id")
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	private User user;
 
 	@ManyToOne(targetEntity = Complaint.class)
@@ -81,6 +82,14 @@ public class Comment extends CirsEntity {
 	@Override
 	public Object getId() {
 		return id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

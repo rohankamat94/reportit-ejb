@@ -34,4 +34,24 @@ public class ComplaintDaoImpl extends AbstractDao<Complaint> implements Complain
 			closeFactory();
 		}
 	}
+
+	@Override
+	public Complaint findByIdWithComments(Long id) {
+
+		EntityManager em = getEntityManager();
+		try {
+			Complaint c = em.find(entityClass, id);
+			c.getComments().size();
+			return c;
+		} catch (SecurityException e) {
+			System.out.println("in findById reflection exception");
+			e.printStackTrace();
+		} finally {
+			em.close();
+			closeFactory();
+		}
+
+		return null;
+	}
+
 }

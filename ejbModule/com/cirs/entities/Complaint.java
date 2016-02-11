@@ -63,6 +63,8 @@ public class Complaint extends CirsEntity {
 	@OneToMany(mappedBy = "complaint", targetEntity = Comment.class)
 	private List<Comment> comments;
 
+	private String location;
+
 	public List<Comment> getComments() {
 		return comments;
 	}
@@ -172,6 +174,14 @@ public class Complaint extends CirsEntity {
 		to.timestamp = timestamp;
 		to.title = title;
 		return to;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public static class ComplaintTO {
