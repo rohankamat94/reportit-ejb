@@ -132,12 +132,19 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 			List<Order> orderList = new ArrayList<>();
 			if (sortParams != null) {
 				for (String s : sortParams.keySet()) {
+					Path<?> path = root;
 					Boolean b = (Boolean) sortParams.get(s);
+					String[] keys = s.split("\\.");
+					for (int i = 0; i < keys.length; i++) {
+						path = path.get(keys[i]);
+					}
+					// s = keys[keys.length - 1];
+
 					Order o;
 					if (b) {
-						o = cb.asc(root.get(s));
+						o = cb.asc(path);
 					} else {
-						o = cb.desc(root.get(s));
+						o = cb.desc(path);
 					}
 					orderList.add(o);
 				}
