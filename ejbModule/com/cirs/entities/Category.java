@@ -76,7 +76,7 @@ public class Category extends CirsEntity {
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof Complaint))
+		if (!(obj instanceof Category))
 			return false;
 		Category other = (Category) obj;
 		return Objects.equals(id, other.id);
@@ -89,5 +89,9 @@ public class Category extends CirsEntity {
 	public void setAdmin(Admin admin) {
 		this.admin = admin;
 	}
-
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 }

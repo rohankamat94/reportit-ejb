@@ -24,13 +24,15 @@ public class ComplaintDaoImpl extends AbstractDao<Complaint> implements Complain
 		super(Complaint.class);
 	}
 
-
 	@Override
-	public Complaint findByIdWithComments(Long id) {
+	public Complaint findByIdWithComments(Long id, Long adminId) {
 
 		EntityManager em = getEntityManager();
 		try {
 			Complaint c = em.find(entityClass, id);
+			if (!c.getUser().getAdmin().getId().equals(adminId)) {
+				return null;
+			}
 			c.getComments().size();
 			return c;
 		} catch (SecurityException e) {
@@ -58,7 +60,6 @@ public class ComplaintDaoImpl extends AbstractDao<Complaint> implements Complain
 		}
 	}
 
-
 	@Override
 	public List<ComplaintTO> getComplaintwithComments(Long adminId) {
 		EntityManager em = getEntityManager();
@@ -66,7 +67,7 @@ public class ComplaintDaoImpl extends AbstractDao<Complaint> implements Complain
 
 			TypedQuery<Complaint> query = em.createNamedQuery(Complaint.FIND_BY_ADMIN, Complaint.class);
 			query.setParameter(CirsEntity.PARAM_ADMIN_ID, adminId);
-			List<Complaint> list = query.getResultList();		
+			List<Complaint> list = query.getResultList();
 			List<ComplaintTO> users = list.stream().map(Complaint::getComplaintTO).collect(Collectors.toList());
 			return users;
 		} finally {

@@ -92,4 +92,12 @@ public class Comment extends CirsEntity {
 		this.user = user;
 	}
 
+	public Complaint getComplaint() {
+		return complaint;
+	}
+
+	public void setComplaint(Complaint complaint) {
+		this.complaint = complaint;
+	}
+
 }
