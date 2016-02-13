@@ -26,15 +26,15 @@ import com.cirs.entities.User.UserTO;
 
 @Entity
 @Table(name = "complaint")
-@NamedQueries({@NamedQuery(name=Complaint.FIND_BY_ADMIN,query="SELECT c FROM Complaint c where c.user.admin.id=:adminId")})
+@NamedQueries({
+		@NamedQuery(name = Complaint.FIND_BY_ADMIN, query = "SELECT c FROM Complaint c where c.user.admin.id=:adminId") })
 public class Complaint extends CirsEntity {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -9199809379768333572L;
-	public static final String FIND_BY_ADMIN="findComplaintByAdmin";
-	
-	
+	public static final String FIND_BY_ADMIN = "findComplaintByAdmin";
+
 	public static enum Status {
 		PENDING, DUPLICATE, SOLVED, SPAM;
 	}
@@ -69,6 +69,8 @@ public class Complaint extends CirsEntity {
 	private List<Comment> comments;
 
 	private String location;
+
+	private String landmark;
 
 	public List<Comment> getComments() {
 		return comments;
@@ -170,7 +172,8 @@ public class Complaint extends CirsEntity {
 		}
 
 		to.comments = commentList;
-
+		to.landmark = landmark;
+		to.location = location;
 		System.out.println(comments.size());
 		UserTO uTo = new UserTO();
 		uTo.setId(user.getId());
@@ -205,6 +208,9 @@ public class Complaint extends CirsEntity {
 		private UserTO user;
 
 		private List<CommentTO> comments;
+
+		private String location;
+		private String landmark;
 
 		public Long getId() {
 			return id;
@@ -270,6 +276,14 @@ public class Complaint extends CirsEntity {
 			this.comments = comments;
 		}
 
+	}
+
+	public String getLandmark() {
+		return landmark;
+	}
+
+	public void setLandmark(String landmark) {
+		this.landmark = landmark;
 	}
 
 }
