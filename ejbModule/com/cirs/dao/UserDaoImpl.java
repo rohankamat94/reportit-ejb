@@ -68,8 +68,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 					u.setUserName(userName);
 					u.setPassword(password);
 					u.setAdmin(admin);
-					boolean created = create(u);
-					if (!created) {
+					Long id = create(u);
+					if (id==null) {
 						errors.add(new UploadError(rowNumber++, "User with username " + userName + " already exists"));
 						continue;
 					}
@@ -116,12 +116,12 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	}
 
 	@Override
-	public boolean create(User entity) throws EntityNotCreatedException {
+	public Long create(User entity) throws EntityNotCreatedException {
 		User u = findUserByUserName(entity.getUserName());
 		if (u == null) {
-			return super.create(entity);
+			return (Long) super.create(entity);
 		} else {
-			return false;
+			return null;
 		}
 	}
 
@@ -133,14 +133,16 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	 */
 
 	@Override
-	public User verifyCredentials(String userName, String password) {
+	public UserTO verifyCredentials(String userName, String password) {
 		EntityManager em = getEntityManager();
 		try {
 			// TypedQuery<User> query =
 			List<User> users = em.createNamedQuery("verifyCredentials", User.class).setParameter("userName", userName)
 					.setParameter("password", password).getResultList();
 			if (users.size() > 0) {
-				return users.get(0);
+				UserTO userTo=users.get(0).getUserTO();
+				
+				return userTo;
 			} else {
 				return null;
 			}

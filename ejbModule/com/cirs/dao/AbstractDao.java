@@ -183,7 +183,7 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 	}
 
 	@Override
-	public boolean create(T entity) throws EntityNotCreatedException {
+	public Object create(T entity) throws EntityNotCreatedException {
 		EntityManager em = getEntityManager();
 		System.out.println("in super create");
 		try {
@@ -191,7 +191,7 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 			em.persist(entity);
 			em.flush();
 			em.getTransaction().commit();
-			return true;
+			return entity.getId();
 		} catch (PersistenceException e) {
 			EntityNotCreatedException e1 = new EntityNotCreatedException(
 					"could not create " + entityClass.getSimpleName() + e.getMessage());

@@ -12,7 +12,7 @@ public interface Dao<T extends CirsEntity> {
 	
 	public T findById(Object id);
 
-	public boolean create(T entity) throws EntityNotCreatedException;
+	public Object create(T entity) throws EntityNotCreatedException;
 
 	public boolean edit(T entity) throws EntityNotFoundException;
 

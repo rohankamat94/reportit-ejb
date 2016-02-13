@@ -26,7 +26,7 @@ public class Comment extends CirsEntity {
 	@Column(name = "comment_id")
 	private Long id;
 
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private User user;
 
 	@ManyToOne(targetEntity = Complaint.class)
@@ -58,13 +58,15 @@ public class Comment extends CirsEntity {
 		to.data = data;
 		to.time = time;
 		ComplaintTO cTo = new ComplaintTO();
-		 cTo.setId(complaint.getId());
-		 to.complaint = cTo;
-		 UserTO uTo = new UserTO();
-		 uTo.setId(user.getId());
-		 uTo.setFirstName(user.getFirstName());
-		 uTo.setLastName(user.getLastName());
-		 to.user = uTo;
+		cTo.setId(complaint.getId());
+		to.complaint = cTo;
+		if (user != null) {
+			UserTO uTo = new UserTO();
+			uTo.setId(user.getId());
+			uTo.setFirstName(user.getFirstName());
+			uTo.setLastName(user.getLastName());
+			to.user = uTo;
+		}
 
 		return to;
 	}
