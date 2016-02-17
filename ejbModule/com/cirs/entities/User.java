@@ -216,6 +216,7 @@ public class User extends CirsEntity {
 		to.gender = gender;
 		to.phone = phone;
 		to.userName = userName;
+		to.email=email;
 		List<ComplaintTO> complaintTos = new ArrayList<>();
 		for (Complaint c : complaints) {
 			ComplaintTO cTo = new ComplaintTO();
