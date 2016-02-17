@@ -72,6 +72,8 @@ public class Complaint extends CirsEntity {
 
 	private String landmark;
 
+	private int upvotes;
+
 	public List<Comment> getComments() {
 		return comments;
 	}
@@ -181,6 +183,7 @@ public class Complaint extends CirsEntity {
 		to.status = status;
 		to.timestamp = timestamp;
 		to.title = title;
+		to.upvotes = upvotes;
 		return to;
 	}
 
@@ -211,6 +214,8 @@ public class Complaint extends CirsEntity {
 
 		private String location;
 		private String landmark;
+
+		private int upvotes;
 
 		public Long getId() {
 			return id;
@@ -276,6 +281,30 @@ public class Complaint extends CirsEntity {
 			this.comments = comments;
 		}
 
+		public String getLocation() {
+			return location;
+		}
+
+		public String getLandmark() {
+			return landmark;
+		}
+
+		public int getUpvotes() {
+			return upvotes;
+		}
+
+		public void setLocation(String location) {
+			this.location = location;
+		}
+
+		public void setLandmark(String landmark) {
+			this.landmark = landmark;
+		}
+
+		public void setUpvotes(int upvotes) {
+			this.upvotes = upvotes;
+		}
+
 	}
 
 	public String getLandmark() {
@@ -284,6 +313,14 @@ public class Complaint extends CirsEntity {
 
 	public void setLandmark(String landmark) {
 		this.landmark = landmark;
+	}
+
+	public int getUpvotes() {
+		return upvotes;
+	}
+
+	public void setUpvotes(int upvotes) {
+		this.upvotes = upvotes;
 	}
 
 }
