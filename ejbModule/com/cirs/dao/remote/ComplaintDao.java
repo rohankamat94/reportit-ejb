@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cirs.dao.ComplaintDaoImpl;
+import com.cirs.dao.impl.ComplaintDaoImpl;
 import com.cirs.entities.Complaint;
 import com.cirs.entities.Complaint.ComplaintTO;
 

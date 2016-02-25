@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cirs.dao.CategoryDaoImpl;
+import com.cirs.dao.impl.CategoryDaoImpl;
 import com.cirs.entities.Category;
 
 @Remote(CategoryDaoImpl.class)

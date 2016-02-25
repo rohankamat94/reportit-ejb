@@ -1,4 +1,4 @@
-package com.cirs.dao;
+package com.cirs.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;

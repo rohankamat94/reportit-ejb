@@ -2,7 +2,7 @@ package com.cirs.dao.remote;
 
 import javax.ejb.Remote;
 
-import com.cirs.dao.AdminDaoImpl;
+import com.cirs.dao.impl.AdminDaoImpl;
 import com.cirs.entities.Admin;
 
 @Remote(AdminDaoImpl.class)

@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.cirs.dao.UserDaoImpl;
+import com.cirs.dao.impl.UserDaoImpl;
 import com.cirs.entities.Admin;
 import com.cirs.entities.User;
 import com.cirs.entities.User.UserTO;
