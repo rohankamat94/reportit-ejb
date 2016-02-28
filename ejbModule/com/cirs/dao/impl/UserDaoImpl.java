@@ -30,7 +30,7 @@ import com.cirs.exceptions.EntityNotCreatedException;
 @Stateless(name = "userDao")
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	// private EntityManager em;
-	
+
 	public UserDaoImpl() {
 		super(User.class);
 	}
@@ -69,7 +69,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 					u.setPassword(password);
 					u.setAdmin(admin);
 					Long id = create(u);
-					if (id==null) {
+					if (id == null) {
 						errors.add(new UploadError(rowNumber++, "User with username " + userName + " already exists"));
 						continue;
 					}
@@ -140,8 +140,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 			List<User> users = em.createNamedQuery("verifyCredentials", User.class).setParameter("userName", userName)
 					.setParameter("password", password).getResultList();
 			if (users.size() > 0) {
-				UserTO userTo=users.get(0).getUserTO();
-				
+				UserTO userTo = users.get(0).getUserTO();
+
 				return userTo;
 			} else {
 				return null;
@@ -173,7 +173,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 
 			TypedQuery<User> query = em.createNamedQuery(User.FIND_BY_ADMIN, User.class);
 			query.setParameter(CirsEntity.PARAM_ADMIN_ID, adminId);
-			List<User> list = query.getResultList();		
+			List<User> list = query.getResultList();
 			List<UserTO> users = list.stream().map(User::getUserTO).collect(Collectors.toList());
 			return users;
 		} finally {
@@ -182,4 +182,18 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 		}
 	}
 
+	@Override
+	public UserTO findUserWIthComplaint(Long id, Long adminId) {
+		EntityManager em = getEntityManager();
+		try {
+			User u = em.find(User.class, id);
+			if (!u.getAdmin().getId().equals(adminId)) {
+				return null;
+			}
+			return u.getUserTO();
+		} finally {
+			em.close();
+			closeFactory();
+		}
+	}
 }
