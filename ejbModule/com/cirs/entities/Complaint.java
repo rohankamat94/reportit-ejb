@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -61,7 +62,7 @@ public class Complaint extends CirsEntity {
 
 	private Timestamp timestamp;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch=FetchType.EAGER)
 	@JoinColumn(referencedColumnName = "id", name = "user_id")
 	private User user;
 
@@ -179,6 +180,8 @@ public class Complaint extends CirsEntity {
 		System.out.println(comments.size());
 		UserTO uTo = new UserTO();
 		uTo.setId(user.getId());
+		uTo.setFirstName(user.getFirstName());
+		uTo.setLastName(user.getLastName());
 		to.user = uTo;
 		to.status = status;
 		to.timestamp = timestamp;
