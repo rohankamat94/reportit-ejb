@@ -20,6 +20,11 @@ import com.cirs.entities.User.UserTO;
 @Table(name = "comment")
 public class Comment extends CirsEntity {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@SequenceGenerator(name = "comment_id_seq", sequenceName = "comment_id_seq", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "comment_id_seq")
@@ -79,6 +84,38 @@ public class Comment extends CirsEntity {
 		private Timestamp time;
 
 		private String data;
+
+		public UserTO getUser() {
+			return user;
+		}
+
+		public ComplaintTO getComplaint() {
+			return complaint;
+		}
+
+		public Timestamp getTime() {
+			return time;
+		}
+
+		public String getData() {
+			return data;
+		}
+
+		public void setUser(UserTO user) {
+			this.user = user;
+		}
+
+		public void setComplaint(ComplaintTO complaint) {
+			this.complaint = complaint;
+		}
+
+		public void setTime(Timestamp time) {
+			this.time = time;
+		}
+
+		public void setData(String data) {
+			this.data = data;
+		}
 	}
 
 	@Override

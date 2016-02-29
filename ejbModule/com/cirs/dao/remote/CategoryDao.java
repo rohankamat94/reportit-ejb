@@ -1,6 +1,5 @@
 package com.cirs.dao.remote;
 
-import java.util.List;
 
 import javax.ejb.Remote;
 

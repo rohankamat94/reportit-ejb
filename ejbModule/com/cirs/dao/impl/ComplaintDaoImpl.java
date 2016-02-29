@@ -6,16 +6,11 @@ import java.util.stream.Collectors;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 
 import com.cirs.dao.remote.ComplaintDao;
-import com.cirs.entities.Category;
 import com.cirs.entities.CirsEntity;
 import com.cirs.entities.Complaint;
-import com.cirs.entities.User;
 import com.cirs.entities.Complaint.ComplaintTO;
-import com.cirs.entities.User.UserTO;
 
 @Stateless(name = "complaintDao")
 public class ComplaintDaoImpl extends AbstractDao<Complaint> implements ComplaintDao {
