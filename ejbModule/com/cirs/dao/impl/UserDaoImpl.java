@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.annotation.PreDestroy;
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -28,6 +29,7 @@ import com.cirs.entities.UserUploadResponse;
 import com.cirs.exceptions.EntityNotCreatedException;
 
 @Stateless(name = "userDao")
+@Remote(UserDao.class)
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	// private EntityManager em;
 

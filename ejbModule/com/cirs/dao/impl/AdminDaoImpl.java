@@ -2,6 +2,7 @@ package com.cirs.dao.impl;
 
 import java.util.List;
 
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -10,6 +11,7 @@ import com.cirs.dao.remote.AdminDao;
 import com.cirs.entities.Admin;
 
 @Stateless(name = "adminDao")
+@Remote(AdminDao.class)
 public class AdminDaoImpl extends AbstractDao<Admin> implements AdminDao {
 	public AdminDaoImpl() {
 		super(Admin.class);

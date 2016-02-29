@@ -3,6 +3,7 @@ package com.cirs.dao.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -12,7 +13,8 @@ import com.cirs.entities.CirsEntity;
 import com.cirs.entities.Complaint;
 import com.cirs.entities.Complaint.ComplaintTO;
 
-@Stateless(name = "complaintDao")
+@Stateless(name="complaintDao")
+@Remote(ComplaintDao.class)
 public class ComplaintDaoImpl extends AbstractDao<Complaint> implements ComplaintDao {
 
 	public ComplaintDaoImpl() {

@@ -2,6 +2,7 @@ package com.cirs.dao.impl;
 
 import java.util.List;
 
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -10,6 +11,7 @@ import com.cirs.dao.remote.CategoryDao;
 import com.cirs.entities.Category;
 
 @Stateless(name = "categoryDao")
+@Remote(CategoryDao.class)
 public class CategoryDaoImpl extends AbstractDao<Category> implements CategoryDao {
 	public CategoryDaoImpl() {
 		super(Category.class);
