@@ -37,7 +37,17 @@ public class Complaint extends CirsEntity {
 	public static final String FIND_BY_ADMIN = "findComplaintByAdmin";
 
 	public static enum Status {
-		PENDING, DUPLICATE, SOLVED, SPAM;
+		PENDING("Approve", "Reject", "Duplicate"), INPROGRESS("Complete", "Duplicate"), COMPLETE, DUPLICATE, REJECTED;
+		private String[] actionsLabel;
+
+		Status(String... actions) {
+			actionsLabel = actions;
+		}
+
+		public String[] getActionsLabel() {
+			return actionsLabel;
+		}
+
 	}
 
 	@Column(name = "complaint_id")
@@ -62,7 +72,7 @@ public class Complaint extends CirsEntity {
 
 	private Timestamp timestamp;
 
-	@ManyToOne(optional = false, fetch=FetchType.EAGER)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(referencedColumnName = "id", name = "user_id")
 	private User user;
 
