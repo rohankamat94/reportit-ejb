@@ -39,11 +39,18 @@ public class Complaint extends CirsEntity {
 	public static enum Status {
 		PENDING("Approve", "Reject", "Duplicate"), INPROGRESS("Complete", "Duplicate"), COMPLETE, DUPLICATE, REJECTED;
 		private String[] actionsLabel;
-
 		Status(String... actions) {
 			actionsLabel = actions;
 		}
 
+		@Override
+		public String toString() {
+			if (this == INPROGRESS) {
+				return "IN PROGRESS";
+			}
+			return super.toString();
+		}
+		
 		public String[] getActionsLabel() {
 			return actionsLabel;
 		}
