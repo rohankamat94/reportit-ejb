@@ -20,7 +20,7 @@ public class ActionStatusMapper {
 		case INPROGRESS:
 			switch (action) {
 			case "Complete":
-				return COMPLETE;
+				return COMPLETED;
 			case "Duplicate":
 				return DUPLICATE;
 			}

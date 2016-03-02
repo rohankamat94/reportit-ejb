@@ -36,7 +36,7 @@ public class Complaint extends CirsEntity {
 	public static final String FIND_BY_ADMIN = "findComplaintByAdmin";
 
 	public static enum Status {
-		PENDING("Approve", "Reject", "Duplicate"), INPROGRESS("Complete", "Duplicate"), COMPLETE, DUPLICATE, REJECTED;
+		PENDING("Approve", "Reject", "Duplicate"), INPROGRESS("Complete", "Duplicate"), COMPLETED, DUPLICATE, REJECTED;
 		private String[] actionsLabel;
 		Status(String... actions) {
 			actionsLabel = actions;
