@@ -68,6 +68,9 @@ public class User extends CirsEntity {
 
 	@Column(name = "phone_number")
 	private String phone;
+	
+	@Column(name="gcm_token")
+	private String gcmToken;
 
 	@JoinColumn(referencedColumnName = "admin_id", name = "admin_id", nullable = false, updatable = false)
 	@ManyToOne
@@ -341,5 +344,13 @@ public class User extends CirsEntity {
 			this.complaints = complaints;
 		}
 
+	}
+
+	public String getGcmToken() {
+		return gcmToken;
+	}
+
+	public void setGcmToken(String gcmToken) {
+		this.gcmToken = gcmToken;
 	}
 }
