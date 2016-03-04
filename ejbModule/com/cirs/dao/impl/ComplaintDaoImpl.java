@@ -1,5 +1,6 @@
 package com.cirs.dao.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,13 +8,17 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 
 import com.cirs.dao.remote.ComplaintDao;
 import com.cirs.entities.CirsEntity;
 import com.cirs.entities.Complaint;
 import com.cirs.entities.Complaint.ComplaintTO;
+import com.cirs.entities.Complaint.Status;
 
-@Stateless(name="complaintDao")
+@Stateless(name = "complaintDao")
 @Remote(ComplaintDao.class)
 public class ComplaintDaoImpl extends AbstractDao<Complaint> implements ComplaintDao {
 
@@ -73,4 +78,17 @@ public class ComplaintDaoImpl extends AbstractDao<Complaint> implements Complain
 		}
 	}
 
+	@Override
+	protected List<Predicate> getPredicates(CriteriaBuilder cb, Path<?> root, String key, Object o) {
+		List<Predicate> preds = super.getPredicates(cb, root, key, o);
+		System.out.println("complaint dao get predicates -key:" + key + " object:" + o);
+		Path<?> path = root.get(key);
+
+		if (key.equals("status")) {
+			Predicate p=Arrays.stream(Status.values()).filter(s -> s.toString().contains(o.toString().toUpperCase()))
+					.peek(System.out::println).map(t -> cb.equal(path, t)).reduce(cb.or(), cb::or);
+			preds.add(p);
+		}
+		return preds;
+	}
 }

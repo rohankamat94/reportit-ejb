@@ -160,10 +160,10 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 		}
 	}
 
-	private List<Predicate> getPredicates(CriteriaBuilder cb, Path<?> root, String key, Object o) {
+	protected List<Predicate> getPredicates(CriteriaBuilder cb, Path<?> root, String key, Object o) {
 		List<Predicate> predicates = new ArrayList<>();
 		Path<?> path = root.get(key);
-		System.out.println("key: " + key + " object: " + o + " object class" + o.getClass().getSimpleName());
+		System.out.println("key: " + key + " object: " + o + " class:" + o.getClass().getSimpleName() + " pathtype:"+path.getJavaType());
 		if (o instanceof Map) {
 			@SuppressWarnings("unchecked")
 			Map<String, Object> map = (Map<String, Object>) o;
