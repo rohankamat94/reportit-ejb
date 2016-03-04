@@ -1,5 +1,6 @@
 package com.cirs.entities;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -64,7 +65,7 @@ public class User extends CirsEntity {
 	private String profilePic;
 
 	@Column(name = "dob")
-	private String dob;
+	private Date dob;
 
 	@Column(name = "phone_number")
 	private String phone;
@@ -94,7 +95,7 @@ public class User extends CirsEntity {
 	public User() {
 	}
 
-	public User(String firstName, String email, String userName, String lastName, String dob, Gender gender,
+	public User(String firstName, String email, String userName, String lastName, Date dob, Gender gender,
 			String password, String profilePic, String phone) {
 		super();
 		this.dob = dob;
@@ -168,11 +169,11 @@ public class User extends CirsEntity {
 		this.profilePic = profilePic;
 	}
 
-	public String getDob() {
+	public Date getDob() {
 		return dob;
 	}
 
-	public void setDob(String dob) {
+	public void setDob(Date dob) {
 		this.dob = dob;
 	}
 
@@ -248,7 +249,7 @@ public class User extends CirsEntity {
 
 		private String profilePic;
 
-		private String dob;
+		private Date dob;
 
 		private String phone;
 
@@ -288,7 +289,7 @@ public class User extends CirsEntity {
 			return profilePic;
 		}
 
-		public String getDob() {
+		public Date getDob() {
 			return dob;
 		}
 
@@ -328,7 +329,7 @@ public class User extends CirsEntity {
 			this.profilePic = profilePic;
 		}
 
-		public void setDob(String dob) {
+		public void setDob(Date dob) {
 			this.dob = dob;
 		}
 
