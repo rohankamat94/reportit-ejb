@@ -19,6 +19,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 
 import com.cirs.dao.remote.Dao;
 import com.cirs.entities.CirsEntity;
+import com.cirs.exceptions.EntityAlreadyExistsException;
 import com.cirs.exceptions.EntityNotCreatedException;
 import com.cirs.exceptions.EntityNotFoundException;
 
@@ -80,7 +81,16 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 			em.flush();
 			em.getTransaction().commit();
 			return true;
+		} catch (PersistenceException e) {
+			System.out.println("in exception edit");
+			System.out.println(e.getCause());
+			System.out.println(e.getMessage());
+			if (e.getMessage().contains("violates unique")) {
+				throw new EntityAlreadyExistsException();
+			}
+			return false;
 		} catch (Exception e) {
+			System.out.println("in catch all");
 			e.printStackTrace();
 			return false;
 		} finally {
@@ -163,7 +173,8 @@ public abstract class AbstractDao<T extends CirsEntity> implements Dao<T> {
 	protected List<Predicate> getPredicates(CriteriaBuilder cb, Path<?> root, String key, Object o) {
 		List<Predicate> predicates = new ArrayList<>();
 		Path<?> path = root.get(key);
-		System.out.println("key: " + key + " object: " + o + " class:" + o.getClass().getSimpleName() + " pathtype:"+path.getJavaType());
+		System.out.println("key: " + key + " object: " + o + " class:" + o.getClass().getSimpleName() + " pathtype:"
+				+ path.getJavaType());
 		if (o instanceof Map) {
 			@SuppressWarnings("unchecked")
 			Map<String, Object> map = (Map<String, Object>) o;
