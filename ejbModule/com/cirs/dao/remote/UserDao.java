@@ -14,7 +14,7 @@ public interface UserDao extends Dao<User> {
 
 	public User findUserByUserName(String userName);
 
-	public UserTO verifyCredentials(Long adminId, String userName, String password);
+	public UserTO verifyCredentials(String userName, String password);
 
 	public List<UserTO> findAllUsersWithComplaints(Long adminId);
 	

@@ -135,7 +135,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 	 */
 
 	@Override
-	public UserTO verifyCredentials(Long adminId, String userName, String password) {
+	public UserTO verifyCredentials(String userName, String password) {
 		EntityManager em = getEntityManager();
 		try {
 			// TypedQuery<User> query =
@@ -143,18 +143,17 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 					.setParameter("password", password).getResultList();
 			if (users.size() > 0) {
 				UserTO userTo = users.get(0).getUserTO();
-				if (userTo.getAdmin().getId().equals(adminId))
-					;
-				return userTo;
-			}
-			return null;
 
+				return userTo;
+			} else {
+				return null;
+			}
 		} finally {
 			em.close();
 			closeFactory();
 		}
 	}
-
+	
 	@Override
 	public List<User> findAll(Long adminId) {
 		EntityManager em = getEntityManager();
