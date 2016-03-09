@@ -38,6 +38,7 @@ public class Complaint extends CirsEntity {
 	public static enum Status {
 		PENDING("Approve", "Reject", "Duplicate"), INPROGRESS("Complete", "Duplicate"), COMPLETED, DUPLICATE, REJECTED;
 		private String[] actionsLabel;
+
 		Status(String... actions) {
 			actionsLabel = actions;
 		}
@@ -49,7 +50,7 @@ public class Complaint extends CirsEntity {
 			}
 			return super.toString();
 		}
-		
+
 		public String[] getActionsLabel() {
 			return actionsLabel;
 		}
@@ -62,10 +63,10 @@ public class Complaint extends CirsEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "complaint_id_seq")
 	private Long id;
 
-	@Column
+	@Column(nullable = false, updatable = false)
 	private String title;
 
-	@Column
+	@Column(nullable = false, updatable = false)
 	private String description;
 
 	@Column
@@ -73,20 +74,23 @@ public class Complaint extends CirsEntity {
 	private Status status;
 
 	@ManyToOne(optional = false)
-	@JoinColumn(referencedColumnName = "category_id", name = "category_id")
+	@JoinColumn(referencedColumnName = "category_id", name = "category_id", updatable = false)
 	private Category category;
 
+	@Column(updatable = false)
 	private Timestamp timestamp;
 
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
-	@JoinColumn(referencedColumnName = "id", name = "user_id")
+	@JoinColumn(referencedColumnName = "id", name = "user_id", updatable = false)
 	private User user;
 
 	@OneToMany(mappedBy = "complaint", targetEntity = Comment.class)
 	private List<Comment> comments;
 
+	@Column(updatable = false)
 	private String location;
 
+	@Column(updatable = false)
 	private String landmark;
 
 	private int upvotes;
