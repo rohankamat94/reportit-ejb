@@ -93,7 +93,10 @@ public class Complaint extends CirsEntity {
 	@Column(updatable = false)
 	private String landmark;
 
-	private int upvotes;
+	// private int upvotes;
+
+	@OneToMany(mappedBy = "complaint", targetEntity = Upvote.class, fetch=FetchType.EAGER)
+	private List<Upvote> upvotes;
 
 	public List<Comment> getComments() {
 		return comments;
@@ -206,7 +209,7 @@ public class Complaint extends CirsEntity {
 		to.status = status;
 		to.timestamp = timestamp;
 		to.title = title;
-		to.upvotes = upvotes;
+		to.upvotes = getUpvotes();
 		return to;
 	}
 
@@ -338,12 +341,9 @@ public class Complaint extends CirsEntity {
 		this.landmark = landmark;
 	}
 
+	@Column(name = "upvotes")
 	public int getUpvotes() {
-		return upvotes;
-	}
-
-	public void setUpvotes(int upvotes) {
-		this.upvotes = upvotes;
+		return upvotes.size();
 	}
 
 }
