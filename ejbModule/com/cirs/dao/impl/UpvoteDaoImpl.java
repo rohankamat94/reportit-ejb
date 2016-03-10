@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
@@ -16,6 +17,7 @@ import com.cirs.entities.Complaint;
 import com.cirs.entities.Complaint.ComplaintTO;
 import com.cirs.entities.Upvote;
 import com.cirs.entities.User;
+import com.cirs.exceptions.EntityAlreadyExistsException;
 
 @Stateless(name = "upvoteDao")
 @Remote(UpvoteDao.class)
@@ -31,10 +33,10 @@ public class UpvoteDaoImpl implements UpvoteDao {
 			em.persist(upvote);
 			em.flush();
 			em.getTransaction().commit();
-		} catch (Exception e) {
-			// TODO: figure out the exception scenarios and handle them
+		} catch (PersistenceException e) {
 			e.printStackTrace();
 			em.getTransaction().rollback();
+			throw new EntityAlreadyExistsException();
 		} finally {
 			em.close();
 			closeEMF();
