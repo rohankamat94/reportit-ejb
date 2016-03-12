@@ -228,6 +228,13 @@ public class User extends CirsEntity {
 			cTo.setCategory(c.getCategory());
 			cTo.setTitle(c.getTitle());
 			cTo.setDescription(c.getDescription());
+			cTo.setStatus(c.getStatus());
+			UserTO complaintUserTo=new UserTO();
+			complaintUserTo.setId(this.id);
+			cTo.setUser(complaintUserTo);
+			cTo.setLandmark(c.getLandmark());
+			cTo.setLocation(c.getLocation());
+			cTo.setTimestamp(c.getTimestamp());
 			complaintTos.add(cTo);
 		}
 		to.complaints = complaintTos;
