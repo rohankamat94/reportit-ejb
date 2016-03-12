@@ -197,7 +197,7 @@ public class Complaint extends CirsEntity {
 			commentList.add(c.getCommentTO());
 		}
 
-		to.comments = commentList;
+		to.setComments(commentList);
 		to.landmark = landmark;
 		to.location = location;
 		System.out.println(comments.size());
@@ -237,6 +237,7 @@ public class Complaint extends CirsEntity {
 		private UserTO user;
 
 		private List<CommentTO> comments;
+		private int commentCount;
 
 		private String location;
 		private String landmark;
@@ -304,6 +305,7 @@ public class Complaint extends CirsEntity {
 		}
 
 		public void setComments(List<CommentTO> comments) {
+			commentCount=comments.size();
 			this.comments = comments;
 		}
 
