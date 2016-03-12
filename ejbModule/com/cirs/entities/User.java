@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +22,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.cirs.entities.Admin.AdminTO;
+import com.cirs.entities.Comment.CommentTO;
 import com.cirs.entities.Complaint.ComplaintTO;
 
 @Entity
@@ -223,21 +225,7 @@ public class User extends CirsEntity {
 		to.email = email;
 		List<ComplaintTO> complaintTos = new ArrayList<>();
 		for (Complaint c : complaints) {
-			ComplaintTO cTo = new ComplaintTO();
-			cTo.setId(c.getId());
-			cTo.setCategory(c.getCategory());
-			cTo.setTitle(c.getTitle());
-			cTo.setDescription(c.getDescription());
-			cTo.setStatus(c.getStatus());
-			UserTO complaintUserTo = new UserTO();
-			complaintUserTo.setId(c.getUser().id);
-			complaintUserTo.setFirstName(c.getUser().firstName);
-			complaintUserTo.setLastName(c.getUser().lastName);
-			cTo.setUser(complaintUserTo);
-			cTo.setLandmark(c.getLandmark());
-			cTo.setLocation(c.getLocation());
-			cTo.setTimestamp(c.getTimestamp());
-			complaintTos.add(cTo);
+			complaintTos.add(c.getComplaintTO());
 		}
 		to.complaints = complaintTos;
 		return to;
