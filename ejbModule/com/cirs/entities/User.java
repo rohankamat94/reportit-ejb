@@ -27,14 +27,14 @@ import com.cirs.entities.Complaint.ComplaintTO;
 @Table(name = "cirs_user")
 @NamedQueries({ @NamedQuery(name = "findUserByUserName", query = "SELECT u FROM User u WHERE u.userName = :userName"),
 		@NamedQuery(name = "verifyCredentials", query = "SELECT u from User u WHERE u.userName= :userName and u.password= :password"),
-		@NamedQuery(name=User.FIND_BY_ADMIN,query="SELECT u from User u WHERE u.admin.id=:adminId") })
+		@NamedQuery(name = User.FIND_BY_ADMIN, query = "SELECT u from User u WHERE u.admin.id=:adminId") })
 public class User extends CirsEntity {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6400091099179867101L;
-	public static final String FIND_BY_ADMIN="findUserByAdmin";
+	public static final String FIND_BY_ADMIN = "findUserByAdmin";
 
 	@Id
 	@SequenceGenerator(name = "user_id_seq", sequenceName = "user_id_seq", allocationSize = 1)
@@ -69,8 +69,8 @@ public class User extends CirsEntity {
 
 	@Column(name = "phone_number")
 	private String phone;
-	
-	@Column(name="gcm_token")
+
+	@Column(name = "gcm_token")
 	private String gcmToken;
 
 	@JoinColumn(referencedColumnName = "admin_id", name = "admin_id", nullable = false, updatable = false)
@@ -212,7 +212,7 @@ public class User extends CirsEntity {
 
 	public UserTO getUserTO() {
 		UserTO to = new UserTO();
-		to.id=id;
+		to.id = id;
 		to.firstName = firstName;
 		to.admin = new AdminTO(admin.getId());
 		to.dob = dob;
@@ -220,7 +220,7 @@ public class User extends CirsEntity {
 		to.gender = gender;
 		to.phone = phone;
 		to.userName = userName;
-		to.email=email;
+		to.email = email;
 		List<ComplaintTO> complaintTos = new ArrayList<>();
 		for (Complaint c : complaints) {
 			ComplaintTO cTo = new ComplaintTO();
@@ -229,8 +229,10 @@ public class User extends CirsEntity {
 			cTo.setTitle(c.getTitle());
 			cTo.setDescription(c.getDescription());
 			cTo.setStatus(c.getStatus());
-			UserTO complaintUserTo=new UserTO();
-			complaintUserTo.setId(this.id);
+			UserTO complaintUserTo = new UserTO();
+			complaintUserTo.setId(c.getUser().id);
+			complaintUserTo.setFirstName(c.getUser().firstName);
+			complaintUserTo.setLastName(c.getUser().lastName);
 			cTo.setUser(complaintUserTo);
 			cTo.setLandmark(c.getLandmark());
 			cTo.setLocation(c.getLocation());
