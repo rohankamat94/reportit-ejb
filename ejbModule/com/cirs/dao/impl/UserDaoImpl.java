@@ -27,6 +27,7 @@ import com.cirs.entities.User;
 import com.cirs.entities.User.UserTO;
 import com.cirs.entities.UserUploadResponse;
 import com.cirs.exceptions.EntityNotCreatedException;
+import com.cirs.util.SecurityUtils;
 
 @Stateless(name = "userDao")
 @Remote(UserDao.class)
@@ -56,7 +57,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 					break;
 				}
 				String userName = r.getCell(0).getStringCellValue();
-				String password = r.getCell(1).getStringCellValue();
+				String password = SecurityUtils.hash(r.getCell(1).getStringCellValue());
 				if (userName == null || userName.isEmpty()) {
 					errors.add(new UploadError(rowNumber++, "Username cannot be null"));
 					continue;
@@ -153,7 +154,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
 			closeFactory();
 		}
 	}
-	
+
 	@Override
 	public List<User> findAll(Long adminId) {
 		EntityManager em = getEntityManager();
